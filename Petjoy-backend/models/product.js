@@ -41,6 +41,22 @@ class Product {
 
     return product;
   }
+
+  // static async getCommentsForProducts(product_id) {
+  //   const productRes = await db.query(
+  //         `SELECT comment, 
+  //               username,
+  //               product_id
+  //          FROM comments
+  //          WHERE product_id = $1`,
+  //       [product_id]);
+
+  //   const product = productRes.rows[0];
+
+  //   return product;
+  // }
+
+
   static async findAll() {
     const productRes = await db.query(
           `SELECT name, 

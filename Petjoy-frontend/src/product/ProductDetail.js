@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom';
 import PetJoy from '../api/api'
 import LoadingSpinner from '../common/LoadingSpinner';
+import UserContext from "../login/UserContext";
 import {
   Container,
   Row,
@@ -14,8 +15,9 @@ import {
 } from "react-bootstrap";
 
 function ProductDetail() {
-
+  const { currentUser } = useContext(UserContext);
   const [product, setProduct] = useState(null)
+  const [comment, setComment] = useState("");
   const { name } = useParams()
   useEffect(function getProductAfterLoad() {
 
@@ -26,6 +28,15 @@ function ProductDetail() {
   },[name]);
 
   if (!product) return <LoadingSpinner/>;
+  const handleChange = (e) => {
+    const { value } = e.target
+    setComment((data) => ({...data, value }))
+  };
+
+  async function handleSubmit(e){
+    e.preventDefault();
+    // let commentForm = await 
+  }
   return (
     <>
 <Container fluid className='px-5'>
@@ -88,6 +99,49 @@ function ProductDetail() {
               <Card style={{ minHeight: "50px" }} className='rounded p-3 m-3'>
                 Description: {product.description}
               </Card>
+            </Row>
+            <Row>
+              <Col md={6}>
+                <h2>Reviews</h2>
+                {product.review ? <ListGroup variant='flush'>
+                    <ListGroup.Item >
+                    </ListGroup.Item>
+                </ListGroup> : 
+                <h2>No reviews for this product</h2>
+                }
+              </Col>
+              <Col md={6}>
+                <ListGroup variant='flush'>
+                  <ListGroup.Item>
+                    <h2>Write a Customer Review</h2>
+                    {currentUser ? (
+                      <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId='comment'>
+                          <Form.Label>Comment</Form.Label>
+                          <Form.Control
+                            as='textarea'
+                            row='3'
+                            value={comment}
+                            onChange={handleChange}
+                          ></Form.Control>
+                        </Form.Group>
+                        <Button
+                          type='submit'
+                          variant='primary'
+                          className='my-3 rounded'
+                        >
+                          Submit
+                        </Button>
+                      </Form>
+                    ) : (<div>
+                        Please <Link to='/login'>sign in</Link> to write a
+                        review{" "}
+                    </div>
+
+                    )}
+                  </ListGroup.Item>
+                </ListGroup>
+              </Col>
             </Row>
           </>
         
