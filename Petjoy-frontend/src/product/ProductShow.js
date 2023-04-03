@@ -16,7 +16,6 @@ function ProductShow() {
     setProducts(products)
   }
   if (!products) return <LoadingSpinner />;
-  console.log(products)
   return (
         <>
         <Container fluid className='px-5 pt-3'>
@@ -26,10 +25,11 @@ function ProductShow() {
               {products.map(p => (
                 <Col sm={12} md={6} lg={4} xl={3}>
                   <ProductCard
-                            key={p.name}
+                            key={p.id}
                             name={p.name}
                             description={p.description}
                             imgUrl={p.imgUrl}
+                            id = {p.id}
                         />
                 </Col>
               ))}

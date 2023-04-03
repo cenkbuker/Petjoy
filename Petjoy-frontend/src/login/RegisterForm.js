@@ -28,7 +28,7 @@ function SignupForm({ signup }) {
       const { name, value } = e.target;
       setFormData(data => ({ ...data, [name]: value }));
     }
-  
+
     return (
         <div className="SignupForm">
           <div className="container col-md-6 offset-md-3 col-lg-4 offset-lg-4">

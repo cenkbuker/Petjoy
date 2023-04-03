@@ -6,6 +6,8 @@ import RegisterForm from "../login/RegisterForm";
 import ProductDetail from "../product/ProductDetail";
 import Product from "../product/Product";
 import PrivateRoute from "./PrivateRoute";
+import ProductCart from "../product/ProductCart";
+import ProductAdmin from "../product/ProductAdmin";
 
 function Routes({ login, signup }) {
 
@@ -29,10 +31,18 @@ function Routes({ login, signup }) {
             <Product/>
           </Route>
 
-          <PrivateRoute exact path="/products/:name">
+          <PrivateRoute exact path="/products/cart">
+            <ProductCart/>
+          </PrivateRoute>
+
+          <PrivateRoute exact path="/products/admin">
+            <ProductAdmin/>
+          </PrivateRoute>
+
+          <PrivateRoute exact path="/products/:id">
             <ProductDetail />
           </PrivateRoute>
-          
+
           <Redirect to="/" />
         </Switch>
       </div>

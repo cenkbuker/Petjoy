@@ -17,132 +17,217 @@ import {
 function ProductDetail() {
   const { currentUser } = useContext(UserContext);
   const [product, setProduct] = useState(null)
-  const [comment, setComment] = useState("");
-  const { name } = useParams()
+  const [productComments, setProductComments] = useState([])
+  const [qty, setQty] = useState(1);
+  const [comment, setComment] = useState({
+    username : currentUser.username,
+    comment : ""
+  });
+  const { id } = useParams()
+  const initialState = {
+    username : currentUser.username,
+    comment : ""
+  }
   useEffect(function getProductAfterLoad() {
 
     async function getProduct(){
-      setProduct(await PetJoy.getProduct(name))
+      setProduct(await PetJoy.getProduct(id))
     };
     getProduct()
-  },[name]);
-
+    async function getProductComments(){
+      const res = await PetJoy.getProductComment(id)
+     setProductComments(res)
+    }
+    getProductComments()
+  },[id]);
   if (!product) return <LoadingSpinner/>;
-  const handleChange = (e) => {
-    const { value } = e.target
-    setComment((data) => ({...data, value }))
-  };
 
   async function handleSubmit(e){
     e.preventDefault();
-    // let commentForm = await 
+    await PetJoy.addProductComment(id, comment)
+    setComment(initialState)
+    const res = await PetJoy.getProductComment(id)
+    setProductComments(res)
+  }
+  async function handleDelete(commentId) {
+    await PetJoy.deleteProductComment(id, commentId)
+    setProductComments(comments => comments.filter(c => c.id !== commentId))
+  }
+  function handleAddToCart() {
+    const existingCartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const newCartItem = {
+      productId: product.id,
+      name: product.name,
+      image: product.image,
+      price: product.price,
+      quantity: qty
+    };
+    let itemAlreadyInCart = false;
+    const updatedCartItems = existingCartItems.map(item => {
+      if (item.productId === newCartItem.productId) {
+        item.quantity += newCartItem.quantity;
+        itemAlreadyInCart = true;
+      }
+      return item;
+    });
+    if (!itemAlreadyInCart) {
+      updatedCartItems.push(newCartItem);
+    }
+  
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
   }
   return (
     <>
-<Container fluid className='px-5'>
-          <>
-            <Row>
-              <Col md={6}>
-                <Image
-                  src="https://picsum.photos/400/300"
-                  alt={product.name}
-                  className='fade-in'
-                  fluid
-                />
-              </Col>
-              <Col md={3}>
-                <ListGroup variant='flush'>
-                  <ListGroup.Item>
-                    <h3>{product.name}</h3>
-                  </ListGroup.Item>
-                  <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
-                </ListGroup>
-              </Col>
-              <Col md={3}>
-                <Card className='rounded'>
-                  <ListGroup variant='flush'>
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Price:</Col>
-                        <Col>
-                          <strong>${product.price}</strong>
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <Row>
-                        <Col>Status:</Col>
-                        <Col>
-                          {product.count_in_stock > 0
-                            ? "In Stock"
-                            : "Out Of Stock"}
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                    <ListGroup.Item>
-                      <Col className='d-grid gap-2'>
-                        <Button
-                          // onClick={addToCartHandler}
-                          className='btn-block rounded'
-                          type='button'
-                          disabled={product.count_in_stock === 0}
-                        >
-                          Add To Cart
-                        </Button>
-                      </Col>
-                    </ListGroup.Item>
-                  </ListGroup>
-                </Card>
-              </Col>
-            </Row>
-            <Row className='me-3 '>
-              <Card style={{ minHeight: "50px" }} className='rounded p-3 m-3'>
-                Description: {product.description}
-              </Card>
-            </Row>
-            <Row>
-              <Col md={6}>
-                <h2>Reviews</h2>
-                {product.review ? <ListGroup variant='flush'>
-                    <ListGroup.Item >
-                    </ListGroup.Item>
-                </ListGroup> : 
-                <h2>No reviews for this product</h2>
-                }
-              </Col>
-              <Col md={6}>
-                <ListGroup variant='flush'>
-                  <ListGroup.Item>
-                    <h2>Write a Customer Review</h2>
-                    {currentUser ? (
-                      <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId='comment'>
-                          <Form.Label>Comment</Form.Label>
-                          <Form.Control
-                            as='textarea'
-                            row='3'
-                            value={comment}
-                            onChange={handleChange}
-                          ></Form.Control>
-                        </Form.Group>
-                        <Button
-                          type='submit'
-                          variant='primary'
-                          className='my-3 rounded'
-                        >
-                          Submit
-                        </Button>
-                      </Form>
-                    ) : (<div>
-                        Please <Link to='/login'>sign in</Link> to write a
-                        review{" "}
-                    </div>
-
+    <Container fluid className='px-5'>
+      <>
+        <Row>
+          <Col md={6}>
+            <Image
+              src="https://picsum.photos/400/300"
+              alt={product.name}
+              className='fade-in'
+              fluid
+            />
+          </Col>
+          <Col md={3}>
+            <ListGroup variant='flush'>
+              <ListGroup.Item>
+                <h3>{product.name}</h3>
+              </ListGroup.Item>
+              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+            </ListGroup>
+          </Col>
+          <Col md={3}>
+            <Card className='rounded'>
+              <ListGroup variant='flush'>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Price:</Col>
+                    <Col>
+                      <strong>${product.price}</strong>
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Row>
+                    <Col>Status:</Col>
+                    <Col>
+                      {product.count_in_stock > 0
+                        ? "In Stock"
+                        : "Out Of Stock"}
+                    </Col>
+                  </Row>
+                  {product.count_in_stock > 0 && (
+                      <ListGroup.Item>
+                        <Row>
+                          <Col>Quantity:</Col>
+                          <Col>
+                            <Form>
+                              <Form.Control
+                                as='select'
+                                value={qty}
+                                onChange={(e) => setQty(e.target.value)}
+                              >
+                                {[...Array(product.count_in_stock).keys()].map(
+                                  (x) => (
+                                    <option key={x + 1} value={x + 1}>
+                                      {x + 1}
+                                    </option>
+                                  ),
+                                )}
+                              </Form.Control>
+                            </Form>
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
                     )}
+                </ListGroup.Item>
+                <ListGroup.Item>
+                  <Col className='d-grid gap-2'>
+                    <Button
+                      onClick={handleAddToCart}
+                      className='btn-block rounded'
+                      type='button'
+                      disabled={product.count_in_stock === 0}
+                    >
+                      Add To Cart
+                    </Button>
+                  </Col>
+                </ListGroup.Item>
+              </ListGroup>
+            </Card>
+          </Col>
+        </Row>
+        <Row className='me-3 '>
+          <Card style={{ minHeight: "50px" }} className='rounded p-3 m-3'>
+            Description: {product.description}
+          </Card>
+        </Row>
+        <Row>
+          <Col md={6}>
+            <h2>Reviews</h2>
+            {productComments.length ? (
+              <ListGroup variant='flush'>
+                {productComments.map((p) => (
+                  <ListGroup.Item key={p.id}>
+                    <Row>
+                      <Col md={10}>
+                        <h3>{p.comment}</h3>
+                      </Col>
+                      <Col md={2}>
+                        {currentUser && currentUser.username === p.username && (
+                          <Button
+                            variant='danger'
+                            className='rounded'
+                            onClick={() => handleDelete(p.id)}
+                          >
+                            X
+                          </Button>
+                        )}
+                      </Col>
+                    </Row>
                   </ListGroup.Item>
-                </ListGroup>
-              </Col>
-            </Row>
+                ))}
+              </ListGroup>
+            ) : (
+              <h2>No reviews for this product</h2>
+            )}
+          </Col>
+          <Col md={6}>
+            <ListGroup variant='flush'>
+              <ListGroup.Item>
+                <h2>Write a Customer Review</h2>
+                {currentUser ? (
+                  <Form onSubmit={handleSubmit}>
+                    <Form.Group controlId='comment'>
+                      <Form.Label>Comment</Form.Label>
+                      <Form.Control
+                        as='textarea'
+                        row='3'
+                        onChange={(e) => {
+                          setComment(data => ({...data, comment:e.target.value}))}}
+                          value = {comment.comment}
+                      ></Form.Control>
+                    </Form.Group>
+                    <Button
+                      type='submit'
+                      variant='primary'
+                      className='my-3 rounded'
+                    >
+                      Submit
+                    </Button>
+                  </Form>
+                ) : (
+                  <div>
+                    Please <Link to='/login'>sign in</Link> to write a review{" "}
+                  </div>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          </Col>
+        </Row>
+     
+    
           </>
         
       </Container>

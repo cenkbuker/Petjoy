@@ -44,10 +44,35 @@ class PetJoy {
     let res = await this.request(`products`)
     return res.products
   }
-  static async getProduct(name){
-    let res = await this.request(`products/${name}`)
-    console.log(res)
+  static async getProduct(id){
+    let res = await this.request(`products/${id}`)
     return res.product
+  }
+  
+  static async addProduct(data){
+    let res = await this.request(`products`, data, "post")
+    return res.product
+  }
+  static async deleteProduct(id, data){
+    let res = await this.request(`products/${id}`, data, "delete")
+    return res.product
+  }
+  static async updateProduct(id, data){
+    let res = await this.request(`products/${id}`, data, "patch")
+    return res.product
+  }
+
+  static async addProductComment(id, data){
+    let res = await this.request(`products/${id}/comments`, data, "post")
+    return res.comment
+  }
+  static async getProductComment(id){
+    let res = await this.request(`products/${id}/comments`)
+    return res.comments
+  }
+  static async deleteProductComment(id, commentId, data){
+    let res = await this.request(`products/${id}/comments/${commentId}`, data, "delete")
+    return res.comment
   }
 }
 export default PetJoy;
