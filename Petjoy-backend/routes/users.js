@@ -68,13 +68,4 @@ router.delete("/:username", ensureCorrectUserOrAdmin, async function (req, res, 
 });
 
 
-router.post("/:username/saved", ensureCorrectUserOrAdmin, async function (req, res, next) {
-  try {
-   const userFav =  await User.userFavs(req.params.username) 
-    return res.json({ userFav})
-  } catch (err) {
-    return next(err);
-  }
-});
-
 module.exports = router;

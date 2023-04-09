@@ -39,6 +39,7 @@ class Product {
     const deletedProductId = result.rows[0].id;
     return deletedProductId;
   }
+
   static async get(id) {
     const productRes = await db.query(
           `SELECT id,
@@ -68,6 +69,32 @@ class Product {
     const comment = productRes.rows;
     return comment;
   }
+  static async getSavedProducts(username) {
+    const productRes = await db.query(
+          `SELECT p.id, p.name, p.count_in_stock, p.price, p.description, p.img_url
+          FROM products p
+          JOIN saved s ON s.product_id = p.id
+          JOIN users u ON s.username = u.username
+          WHERE u.username = $1;`,
+        [username]);
+
+    const saved = productRes.rows;
+    return saved;
+  }
+  static async saveProduct(id, username) {
+    const productRes = await db.query(
+          `INSERT INTO saved
+                (username,
+                product_id)
+           VALUES ($1, $2)
+           `,
+        [username, id]);
+
+    const Productcomment = productRes.rows;
+
+    return Productcomment;
+  }
+
   static async addCommentsForProducts(id, {username,comment}) {
     const productRes = await db.query(
           `INSERT INTO comments
@@ -123,6 +150,5 @@ class Product {
     if (!productRes) throw new NotFoundError(`No product: ${result.name}`);
   }
 }
-// name change to id 
 
 module.exports = Product;

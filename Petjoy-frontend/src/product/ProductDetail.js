@@ -19,6 +19,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null)
   const [productComments, setProductComments] = useState([])
   const [qty, setQty] = useState(1);
+  const [isSaved, setIsSaved] = useState(false);
   const [comment, setComment] = useState({
     username : currentUser.username,
     comment : ""
@@ -75,6 +76,14 @@ function ProductDetail() {
     }
   
     localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+  }
+  async function handleSaveProduct() {
+    try {
+      await PetJoy.saveProduct(id, currentUser.username);
+      setIsSaved(true);
+    } catch (error) {
+      console.error(error);
+    }
   }
   return (
     <>
@@ -151,6 +160,14 @@ function ProductDetail() {
                       disabled={product.count_in_stock === 0}
                     >
                       Add To Cart
+                    </Button>
+                    <Button
+                      onClick={handleSaveProduct}
+                      className="btn-block rounded"
+                      type="button"
+                      disabled={isSaved}
+                    >
+                      {isSaved ? "Saved!" : "Save Product"}
                     </Button>
                   </Col>
                 </ListGroup.Item>

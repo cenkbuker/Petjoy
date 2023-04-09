@@ -8,10 +8,20 @@ function NavBar({ logout }) {
 
   function loggedInNav() {
     return (
-        <ul className="navbar-nav ml-auto">
+        <ul className="navbar-nav ml-4">
           <li className="nav-item mr-4">
             <NavLink className="nav-link" to="/products">
               Products
+            </NavLink>
+          </li>
+          <li className="nav-item mr-4">
+            <NavLink className="nav-link" to="/profile">
+              Profile
+            </NavLink>
+          </li>
+          <li className="nav-item mr-4">
+            <NavLink className="nav-link" to={`/products/${currentUser.username}/saved`}>
+              Saved
             </NavLink>
           </li>
           <li className="nav-item">
@@ -19,6 +29,7 @@ function NavBar({ logout }) {
               Log out {currentUser.first_name || currentUser.username}
             </Link>
           </li>
+          
         </ul>
     );
   }

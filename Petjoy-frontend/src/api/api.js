@@ -44,6 +44,15 @@ class PetJoy {
     let res = await this.request(`products`)
     return res.products
   }
+  static async getSavedProducts(username){
+    let res = await this.request(`products/${username}/saved`)
+    return res.products
+  }
+  static async saveProduct(id, username, data){
+    let res = await this.request(`products/${id}/${username}/saved`,data,"post")
+    return res.products
+  }
+
   static async getProduct(id){
     let res = await this.request(`products/${id}`)
     return res.product

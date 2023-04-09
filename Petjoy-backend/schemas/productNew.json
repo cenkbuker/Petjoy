@@ -17,7 +17,7 @@
       "type": "integer",
       "minimum": 0
     },
-    "logoUrl": {
+    "imgUrl": {
       "type": "string",
       "format": "uri"
     }

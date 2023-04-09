@@ -12,13 +12,13 @@ const productNewSchema = require("../schemas/productNew.json");
 const router = new express.Router();
 
 
-  router.post("/",  async function (req, res, next) {
+  router.post("/",ensureAdmin,  async function (req, res, next) {
     try {
-      // const validator = jsonschema.validate(req.body, productNewSchema);
-      // if (!validator.valid) {
-      //   const errs = validator.errors.map(e => e.stack);
-      //   throw new BadRequestError(errs);
-      // }
+      const validator = jsonschema.validate(req.body, productNewSchema);
+      if (!validator.valid) {
+        const errs = validator.errors.map(e => e.stack);
+        throw new BadRequestError(errs);
+      }
   
       const product = await Product.create(req.body);
       return res.status(201).json({ product });
@@ -53,6 +53,22 @@ const router = new express.Router();
       return next(err);
     }
   });
+  router.get("/:username/saved", async function (req, res, next) {
+    try {
+      const products = await Product.getSavedProducts(req.params.username);
+      return res.json({ products });
+    } catch (err) {
+      return next(err);
+    }
+  });
+  router.post("/:id/:username/saved", async function (req, res, next) {
+    try {
+      const products = await Product.saveProduct(req.params.id, req.params.username);
+      return res.json({ products });
+    } catch (err) {
+      return next(err);
+    }
+  });
   
   router.get("/:id/comments", async function (req, res, next) {
     try {
@@ -63,7 +79,7 @@ const router = new express.Router();
     }
   });
 
-  router.post("/:id/comments", async function (req, res, next) {
+  router.post("/:id/comments", ensureCorrectUserOrAdmin,async function (req, res, next) {
     try {
       const comment = await Product.addCommentsForProducts(req.params.id,req.body);
       return res.status(201).json({ comment })
