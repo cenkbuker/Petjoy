@@ -85,7 +85,6 @@ function ProductDetail() {
       console.error(error);
     }
   }
-  console.log(product)
   return (
     <>
     <Container fluid className='px-5 pt-5'>

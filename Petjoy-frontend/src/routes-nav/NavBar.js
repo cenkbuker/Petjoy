@@ -8,23 +8,23 @@ function NavBar({ logout }) {
 
   function loggedInNav() {
     return (
-        <ul className="navbar-nav ml-4 navbar-display">
-          <li className="nav-item mr-4">
+        <ul className="navbar-nav ms-4 navbar-display">
+          <li className="nav-item">
             <NavLink className="nav-link" to="/products">
               Products
             </NavLink>
           </li>
-          <li className="nav-item mr-4">
+          <li className="nav-item">
             <NavLink className="nav-link" to="/profile">
               Profile
             </NavLink>
           </li>
-          <li className="nav-item mr-4">
+          <li className="nav-item">
             <NavLink className="nav-link" to={`/products/${currentUser.username}/saved`}>
               Saved
             </NavLink>
           </li>
-          <li className="nav-item mr-4">
+          <li className="nav-item">
             <NavLink className="nav-link" to={`/products/cart`}>
               Cart
             </NavLink>
@@ -42,12 +42,12 @@ function NavBar({ logout }) {
   function loggedOutNav() {
     return (
         <ul className="navbar-nav ms-auto">
-          <li className="nav-item mr-4">
+          <li className="nav-item me-4">
             <NavLink className="nav-link" to="/login">
               Login
             </NavLink>
           </li>
-          <li className="nav-item mr-4">
+          <li className="nav-item me-4">
             <NavLink className="nav-link" to="/signup">
               Sign Up
             </NavLink>
@@ -57,8 +57,8 @@ function NavBar({ logout }) {
   }
 
   return (
-      <nav className="Navigation navbar navbar-expand-md">
-        <Link className="navbar-brand" to="/">
+      <nav className="Navigation navbar navbar-expand-md navbar-display">
+        <Link className="navbar-brand ms-2" to="/">
           Petjoy
         </Link>
         {currentUser ? loggedInNav() : loggedOutNav()}
