@@ -18,7 +18,6 @@ function ProductCart() {
   const getTotalCost = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
-
   return (
     <Container>
       <Row className="justify-content-center">

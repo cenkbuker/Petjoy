@@ -14,7 +14,7 @@ import ProfileForm from "../users/ProfileForm";
 function Routes({ login, signup }) {
 
   return (
-      <div className="pt-5">
+      <div>
         <Switch>
 
           <Route exact path="/">

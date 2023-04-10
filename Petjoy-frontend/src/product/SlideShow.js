@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// import { Link } from "react-router-dom";
 import { Carousel, Image } from "react-bootstrap";
 import "./SlideShow.css";
 const SlideShow = () => {
@@ -14,32 +13,21 @@ const SlideShow = () => {
       onSelect={handleSelect}
       interval={null}
       fade
-      className='mt-3'
     >
     
       <Carousel.Item>
         <Image
           className='img carousel'
-          src='https://cdn11.bigcommerce.com/s-5o6frrlm/images/stencil/original/carousel/171/jab-05-2022__73985.jpg?c=2'
+          src='https://plus.unsplash.com/premium_photo-1667563111755-f4a29274374c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80'
           alt='First slide'
         />
-        {/* <Carousel.Caption>
-          <h3 className='text-dark fs-md-5 slide-title'>
-            Excited Pet Accessories
-          </h3>
-        </Carousel.Caption> */}
       </Carousel.Item>
       <Carousel.Item>
         <Image
           className='img carousel'
-          src='https://cdn11.bigcommerce.com/s-5o6frrlm/images/stencil/original/carousel/187/louisdog_fall2022.jpg?c=2'
+          src='https://images.unsplash.com/photo-1589652717406-1c69efaf1ff8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80'
           alt='Second slide'
         />
-        {/* <Carousel.Caption>
-          <h3 className='text-dark fs-md-5 slide-title'>
-            The Loved Treats
-          </h3>
-        </Carousel.Caption> */}
       </Carousel.Item>
     </Carousel>
   );

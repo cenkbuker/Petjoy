@@ -59,7 +59,7 @@ function ProductDetail() {
     const newCartItem = {
       productId: product.id,
       name: product.name,
-      image: product.image,
+      image: product.imgUrl,
       price: product.price,
       quantity: qty
     };
@@ -85,30 +85,27 @@ function ProductDetail() {
       console.error(error);
     }
   }
+  console.log(product)
   return (
     <>
-    <Container fluid className='px-5'>
+    <Container fluid className='px-5 pt-5'>
       <>
         <Row>
           <Col md={6}>
             <Image
-              src="https://picsum.photos/400/300"
+              src={product.imgUrl}
               alt={product.name}
               className='fade-in'
               fluid
             />
           </Col>
-          <Col md={3}>
-            <ListGroup variant='flush'>
+
+          <Col md={{ span: 3, offset: 3 }}>
+            <Card className='rounded'>
+              <ListGroup variant='flush'>
               <ListGroup.Item>
                 <h3>{product.name}</h3>
               </ListGroup.Item>
-              <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
-            </ListGroup>
-          </Col>
-          <Col md={3}>
-            <Card className='rounded'>
-              <ListGroup variant='flush'>
                 <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
@@ -158,6 +155,7 @@ function ProductDetail() {
                       className='btn-block rounded'
                       type='button'
                       disabled={product.count_in_stock === 0}
+                      variant='secondary'
                     >
                       Add To Cart
                     </Button>
@@ -166,6 +164,7 @@ function ProductDetail() {
                       className="btn-block rounded"
                       type="button"
                       disabled={isSaved}
+                      variant='secondary'
                     >
                       {isSaved ? "Saved!" : "Save Product"}
                     </Button>
@@ -228,7 +227,7 @@ function ProductDetail() {
                     </Form.Group>
                     <Button
                       type='submit'
-                      variant='primary'
+                      variant='secondary'
                       className='my-3 rounded'
                     >
                       Submit

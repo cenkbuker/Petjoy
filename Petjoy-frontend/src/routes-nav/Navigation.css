@@ -7,3 +7,9 @@
   font-weight: bold;
   color: black;
 }
+
+.navbar-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
