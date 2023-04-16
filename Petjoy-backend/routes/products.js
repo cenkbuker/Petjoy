@@ -25,14 +25,7 @@ router.post("/", ensureAdmin, async function (req, res, next) {
     return next(err);
   }
 });
-// router.delete("/",  async function (req, res, next) {
-//   try {
-//     const product = await Product.create(req.body);
-//     return res.status(201).json({ product });
-//   } catch (err) {
-//     return next(err);
-//   }
-// });
+
 router.patch("/", async function (req, res, next) {
   try {
     const product = await Product.updateProduct(req.body);
